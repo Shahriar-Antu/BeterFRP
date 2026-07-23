@@ -15,6 +15,7 @@
 package mem
 
 import (
+	"net"
 	"sync"
 	"time"
 
@@ -139,11 +140,12 @@ func (m *serverMetrics) NewProxy(name string, proxyType string, user string, cli
 	proxyStats, ok := m.info.ProxyStatistics[name]
 	if !ok || proxyStats.ProxyType != proxyType {
 		proxyStats = &ProxyStatistics{
-			Name:       name,
-			ProxyType:  proxyType,
-			CurConns:   metric.NewCounter(),
-			TrafficIn:  metric.NewDateCounter(ReserveDays),
-			TrafficOut: metric.NewDateCounter(ReserveDays),
+			Name:          name,
+			ProxyType:     proxyType,
+			CurConns:      metric.NewCounter(),
+			TrafficIn:     metric.NewDateCounter(ReserveDays),
+			TrafficOut:    metric.NewDateCounter(ReserveDays),
+			ConnectedIPs:  make(map[string]int64),
 		}
 		m.info.ProxyStatistics[name] = proxyStats
 	}
@@ -163,7 +165,7 @@ func (m *serverMetrics) CloseProxy(name string, proxyType string) {
 	}
 }
 
-func (m *serverMetrics) OpenConnection(name string, _ string) {
+func (m *serverMetrics) OpenConnection(name string, _ string, remoteAddr string) {
 	m.info.CurConns.Inc(1)
 
 	m.mu.Lock()
@@ -171,10 +173,16 @@ func (m *serverMetrics) OpenConnection(name string, _ string) {
 	proxyStats, ok := m.info.ProxyStatistics[name]
 	if ok {
 		proxyStats.CurConns.Inc(1)
+		if remoteAddr != "" {
+			ip := extractIP(remoteAddr)
+			if ip != "" {
+				proxyStats.ConnectedIPs[ip] = proxyStats.ConnectedIPs[ip] + 1
+			}
+		}
 	}
 }
 
-func (m *serverMetrics) CloseConnection(name string, _ string) {
+func (m *serverMetrics) CloseConnection(name string, _ string, remoteAddr string) {
 	m.info.CurConns.Dec(1)
 
 	m.mu.Lock()
@@ -182,6 +190,18 @@ func (m *serverMetrics) CloseConnection(name string, _ string) {
 	proxyStats, ok := m.info.ProxyStatistics[name]
 	if ok {
 		proxyStats.CurConns.Dec(1)
+		if remoteAddr != "" {
+			ip := extractIP(remoteAddr)
+			if ip != "" {
+				if count, exists := proxyStats.ConnectedIPs[ip]; exists {
+					if count <= 1 {
+						delete(proxyStats.ConnectedIPs, ip)
+					} else {
+						proxyStats.ConnectedIPs[ip] = count - 1
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -236,6 +256,10 @@ func toProxyStats(name string, proxyStats *ProxyStatistics) *ProxyStats {
 		TodayTrafficIn:  proxyStats.TrafficIn.TodayCount(),
 		TodayTrafficOut: proxyStats.TrafficOut.TodayCount(),
 		CurConns:        int64(proxyStats.CurConns.Count()),
+		ConnectedIPs:    make(map[string]int64),
+	}
+	for ip, count := range proxyStats.ConnectedIPs {
+		ps.ConnectedIPs[ip] = count
 	}
 	if !proxyStats.LastStartTime.IsZero() {
 		ps.LastStartTime = proxyStats.LastStartTime.Format("01-02 15:04:05")
@@ -297,4 +321,12 @@ func (m *serverMetrics) GetProxyTraffic(name string) (res *ProxyTrafficInfo) {
 		res.TrafficOut = proxyStats.TrafficOut.GetLastDaysCount(ReserveDays)
 	}
 	return
+}
+
+func extractIP(remoteAddr string) string {
+	host, _, err := net.SplitHostPort(remoteAddr)
+	if err != nil {
+		return remoteAddr
+	}
+	return host
 }

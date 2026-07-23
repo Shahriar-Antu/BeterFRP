@@ -9,8 +9,8 @@ type ServerMetrics interface {
 	CloseClient()
 	NewProxy(name string, proxyType string, user string, clientID string)
 	CloseProxy(name string, proxyType string)
-	OpenConnection(name string, proxyType string)
-	CloseConnection(name string, proxyType string)
+	OpenConnection(name string, proxyType string, remoteAddr string)
+	CloseConnection(name string, proxyType string, remoteAddr string)
 	AddTrafficIn(name string, proxyType string, trafficBytes int64)
 	AddTrafficOut(name string, proxyType string, trafficBytes int64)
 }
@@ -27,11 +27,11 @@ func Register(m ServerMetrics) {
 
 type noopServerMetrics struct{}
 
-func (noopServerMetrics) NewClient()                              {}
-func (noopServerMetrics) CloseClient()                            {}
-func (noopServerMetrics) NewProxy(string, string, string, string) {}
-func (noopServerMetrics) CloseProxy(string, string)               {}
-func (noopServerMetrics) OpenConnection(string, string)           {}
-func (noopServerMetrics) CloseConnection(string, string)          {}
-func (noopServerMetrics) AddTrafficIn(string, string, int64)      {}
-func (noopServerMetrics) AddTrafficOut(string, string, int64)     {}
+func (noopServerMetrics) NewClient()                                            {}
+func (noopServerMetrics) CloseClient()                                          {}
+func (noopServerMetrics) NewProxy(string, string, string, string)               {}
+func (noopServerMetrics) CloseProxy(string, string)                             {}
+func (noopServerMetrics) OpenConnection(string, string, string)                 {}
+func (noopServerMetrics) CloseConnection(string, string, string)                {}
+func (noopServerMetrics) AddTrafficIn(string, string, int64)                    {}
+func (noopServerMetrics) AddTrafficOut(string, string, int64)                   {}

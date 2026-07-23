@@ -89,6 +89,28 @@
           </div>
         </div>
 
+        <!-- Connected IPs Section -->
+        <div v-if="proxy.sortedConnectedIPs.length > 0" class="connected-ips-section">
+          <div class="config-section-header">
+            <el-icon><Connection /></el-icon>
+            <h2>Connected IPs</h2>
+          </div>
+          <div class="ip-table">
+            <div class="ip-table-header">
+              <span class="ip-col">Source IP</span>
+              <span class="count-col">Connections</span>
+            </div>
+            <div v-for="entry in proxy.sortedConnectedIPs" :key="entry.ip" class="ip-table-row">
+              <span class="ip-col">{{ entry.ip }}</span>
+              <span class="count-col">
+                <el-tag size="small" :type="entry.count > 10 ? 'danger' : entry.count > 5 ? 'warning' : 'info'">
+                  {{ entry.count }}
+                </el-tag>
+              </span>
+            </div>
+          </div>
+        </div>
+
         <!-- Configuration Section -->
         <div class="config-section">
           <div class="config-section-header">
@@ -770,6 +792,58 @@ html.dark .config-item-icon.route {
 /* Traffic Card */
 .traffic-body {
   padding: 20px;
+}
+
+/* Connected IPs Section */
+.connected-ips-section {
+  margin-bottom: 24px;
+}
+
+.ip-table {
+  background: var(--el-bg-color);
+  border: 1px solid var(--header-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ip-table-header {
+  display: flex;
+  padding: 12px 20px;
+  background: var(--el-fill-color);
+  border-bottom: 1px solid var(--header-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ip-table-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--header-border);
+  transition: background 0.15s;
+}
+
+.ip-table-row:last-child {
+  border-bottom: none;
+}
+
+.ip-table-row:hover {
+  background: var(--el-fill-color-light);
+}
+
+.ip-col {
+  flex: 1;
+  font-size: 14px;
+  font-family: monospace;
+  color: var(--text-primary);
+}
+
+.count-col {
+  width: 120px;
+  text-align: right;
 }
 
 /* Not Found */

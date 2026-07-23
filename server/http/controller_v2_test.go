@@ -431,6 +431,7 @@ func TestAPIV2ProxyListDetailAndUsers(t *testing.T) {
 	resp = performRequest(router, "/api/v2/proxies/tcp-alice")
 	rawProxyDetailResp := decodeResponse[v2EnvelopeForTest[map[string]json.RawMessage]](t, resp)
 	assertRawJSONKeysFromMessage(t, rawProxyDetailResp.Data["status"],
+		"connectedIPs",
 		"curConns",
 		"lastCloseAt",
 		"lastStartAt",

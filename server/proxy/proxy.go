@@ -317,9 +317,9 @@ func (pxy *BaseProxy) handleUserTCPConnection(userConn net.Conn) {
 
 	name := pxy.GetName()
 	proxyType := cfg.Type
-	metrics.Server.OpenConnection(name, proxyType)
+	metrics.Server.OpenConnection(name, proxyType, userConn.RemoteAddr().String())
 	inCount, outCount, _ := pxy.joinUserConnection(local, userConn, proxyType, xl)
-	metrics.Server.CloseConnection(name, proxyType)
+	metrics.Server.CloseConnection(name, proxyType, userConn.RemoteAddr().String())
 	metrics.Server.AddTrafficIn(name, proxyType, inCount)
 	metrics.Server.AddTrafficOut(name, proxyType, outCount)
 	xl.Debugf("join connections closed")

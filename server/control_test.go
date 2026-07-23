@@ -525,8 +525,8 @@ func (m *countingServerMetrics) CloseClient() {
 
 func (*countingServerMetrics) NewProxy(string, string, string, string) {}
 func (*countingServerMetrics) CloseProxy(string, string)               {}
-func (*countingServerMetrics) OpenConnection(string, string)           {}
-func (*countingServerMetrics) CloseConnection(string, string)          {}
+func (*countingServerMetrics) OpenConnection(string, string, string)           {}
+func (*countingServerMetrics) CloseConnection(string, string, string)          {}
 func (*countingServerMetrics) AddTrafficIn(string, string, int64)      {}
 func (*countingServerMetrics) AddTrafficOut(string, string, int64)     {}
 

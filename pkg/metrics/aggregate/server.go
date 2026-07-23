@@ -68,15 +68,15 @@ func (m *serverMetrics) CloseProxy(name string, proxyType string) {
 	}
 }
 
-func (m *serverMetrics) OpenConnection(name string, proxyType string) {
+func (m *serverMetrics) OpenConnection(name string, proxyType string, remoteAddr string) {
 	for _, v := range m.ms {
-		v.OpenConnection(name, proxyType)
+		v.OpenConnection(name, proxyType, remoteAddr)
 	}
 }
 
-func (m *serverMetrics) CloseConnection(name string, proxyType string) {
+func (m *serverMetrics) CloseConnection(name string, proxyType string, remoteAddr string) {
 	for _, v := range m.ms {
-		v.CloseConnection(name, proxyType)
+		v.CloseConnection(name, proxyType, remoteAddr)
 	}
 }
 

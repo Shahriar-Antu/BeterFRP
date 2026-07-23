@@ -44,6 +44,7 @@ type ProxyStats struct {
 	LastStartAt     int64
 	LastCloseAt     int64
 	CurConns        int64
+	ConnectedIPs    map[string]int64
 }
 
 type ProxyTrafficInfo struct {
@@ -62,6 +63,7 @@ type ProxyStatistics struct {
 	CurConns      metric.Counter
 	LastStartTime time.Time
 	LastCloseTime time.Time
+	ConnectedIPs  map[string]int64
 }
 
 type ServerStatistics struct {

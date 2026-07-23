@@ -40,11 +40,11 @@ func (m *serverMetrics) CloseProxy(name string, proxyType string) {
 	m.proxyCountDetailed.WithLabelValues(proxyType, name).Dec()
 }
 
-func (m *serverMetrics) OpenConnection(name string, proxyType string) {
+func (m *serverMetrics) OpenConnection(name string, proxyType string, _ string) {
 	m.connectionCount.WithLabelValues(name, proxyType).Inc()
 }
 
-func (m *serverMetrics) CloseConnection(name string, proxyType string) {
+func (m *serverMetrics) CloseConnection(name string, proxyType string, _ string) {
 	m.connectionCount.WithLabelValues(name, proxyType).Dec()
 }
 

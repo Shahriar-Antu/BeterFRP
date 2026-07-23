@@ -111,6 +111,7 @@ export interface ProxyV2Status {
   todayTrafficIn: number
   todayTrafficOut: number
   curConns: number
+  connectedIPs?: Record<string, number>
   lastStartAt?: number
   lastCloseAt?: number
 }

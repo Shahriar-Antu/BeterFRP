@@ -14,6 +14,7 @@ class BaseProxy {
   clientID: string
   addr: string
   port: number
+  connectedIPs: Record<string, number>
 
   customDomains: string
   hostHeaderRewrite: string
@@ -48,6 +49,7 @@ class BaseProxy {
     this.status = proxyStats.status
     this.user = proxyStats.user || ''
     this.clientID = proxyStats.clientID || ''
+    this.connectedIPs = proxyStats.connectedIPs || {}
 
     this.addr = ''
     this.port = 0
@@ -57,6 +59,12 @@ class BaseProxy {
     this.subdomain = ''
     this.multiplexer = ''
     this.routeByHTTPUser = ''
+  }
+
+  get sortedConnectedIPs(): { ip: string; count: number }[] {
+    return Object.entries(this.connectedIPs)
+      .map(([ip, count]) => ({ ip, count }))
+      .sort((a, b) => b.count - a.count)
   }
 }
 

@@ -18,6 +18,10 @@
             <span class="meta-label">Connections:</span>
             <span class="meta-value">{{ proxy.conns }}</span>
           </span>
+          <span v-if="connectedIPCount > 0" class="meta-item connected-ips">
+            <span class="meta-label">Source IPs:</span>
+            <span class="meta-value">{{ connectedIPCount }}</span>
+          </span>
           <span class="meta-item" v-if="proxy.clientID">
             <span class="meta-label">Client:</span>
             <span class="meta-value">{{
@@ -65,6 +69,10 @@ interface Props {
 
 const props = defineProps<Props>()
 const route = useRoute()
+
+const connectedIPCount = computed(() => {
+  return Object.keys(props.proxy.connectedIPs || {}).length
+})
 
 const proxyLink = computed(() => {
   const base = `/proxy/${props.proxy.name}`
@@ -158,6 +166,10 @@ const proxyLink = computed(() => {
   font-size: 13px;
   font-weight: 500;
   color: var(--el-text-color-regular);
+}
+
+.connected-ips .meta-value {
+  color: var(--el-color-primary);
 }
 
 /* Right Section */

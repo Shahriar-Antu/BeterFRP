@@ -555,6 +555,7 @@ func (c *Controller) buildV2ProxyResp(ps *mem.ProxyStats) model.V2ProxyResp {
 			TodayTrafficIn:  ps.TodayTrafficIn,
 			TodayTrafficOut: ps.TodayTrafficOut,
 			CurConns:        ps.CurConns,
+			ConnectedIPs:    ps.ConnectedIPs,
 			LastStartAt:     ps.LastStartAt,
 			LastCloseAt:     ps.LastCloseAt,
 		},
