@@ -140,14 +140,16 @@ func (m *serverMetrics) NewProxy(name string, proxyType string, user string, cli
 	proxyStats, ok := m.info.ProxyStatistics[name]
 	if !ok || proxyStats.ProxyType != proxyType {
 		proxyStats = &ProxyStatistics{
-			Name:          name,
-			ProxyType:     proxyType,
-			CurConns:      metric.NewCounter(),
-			TrafficIn:     metric.NewDateCounter(ReserveDays),
-			TrafficOut:    metric.NewDateCounter(ReserveDays),
-			ConnectedIPs:  make(map[string]int64),
+			Name:         name,
+			ProxyType:    proxyType,
+			CurConns:     metric.NewCounter(),
+			TrafficIn:    metric.NewDateCounter(ReserveDays),
+			TrafficOut:   metric.NewDateCounter(ReserveDays),
+			ConnectedIPs: make(map[string]int64),
 		}
 		m.info.ProxyStatistics[name] = proxyStats
+	} else {
+		proxyStats.ConnectedIPs = make(map[string]int64)
 	}
 	proxyStats.User = user
 	proxyStats.ClientID = clientID
@@ -176,6 +178,9 @@ func (m *serverMetrics) OpenConnection(name string, _ string, remoteAddr string)
 		if remoteAddr != "" {
 			ip := extractIP(remoteAddr)
 			if ip != "" {
+				if proxyStats.ConnectedIPs == nil {
+					proxyStats.ConnectedIPs = make(map[string]int64)
+				}
 				proxyStats.ConnectedIPs[ip] = proxyStats.ConnectedIPs[ip] + 1
 			}
 		}
@@ -190,7 +195,7 @@ func (m *serverMetrics) CloseConnection(name string, _ string, remoteAddr string
 	proxyStats, ok := m.info.ProxyStatistics[name]
 	if ok {
 		proxyStats.CurConns.Dec(1)
-		if remoteAddr != "" {
+		if remoteAddr != "" && proxyStats.ConnectedIPs != nil {
 			ip := extractIP(remoteAddr)
 			if ip != "" {
 				if count, exists := proxyStats.ConnectedIPs[ip]; exists {
