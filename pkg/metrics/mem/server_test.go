@@ -151,3 +151,22 @@ func (m *serverMetrics) hasProxyStatistics(name string) bool {
 	_, ok := m.info.ProxyStatistics[name]
 	return ok
 }
+
+func TestServerMetricsConnectedIPsRetention(t *testing.T) {
+	require := require.New(t)
+
+	metrics := newServerMetrics()
+	metrics.NewProxy("test-proxy", "tcp", "user", "client-id")
+	metrics.OpenConnection("test-proxy", "tcp", "192.168.1.100:12345")
+
+	stats := metrics.GetProxyByName("test-proxy")
+	require.Equal(int64(1), stats.CurConns)
+	require.Equal(int64(1), stats.ConnectedIPs["192.168.1.100"])
+
+	// Re-register proxy (heartbeat / config refresh)
+	metrics.NewProxy("test-proxy", "tcp", "user", "client-id")
+
+	statsAfter := metrics.GetProxyByName("test-proxy")
+	require.Equal(int64(1), statsAfter.CurConns)
+	require.Equal(int64(1), statsAfter.ConnectedIPs["192.168.1.100"])
+}

@@ -148,7 +148,7 @@ func (m *serverMetrics) NewProxy(name string, proxyType string, user string, cli
 			ConnectedIPs: make(map[string]int64),
 		}
 		m.info.ProxyStatistics[name] = proxyStats
-	} else {
+	} else if proxyStats.ConnectedIPs == nil {
 		proxyStats.ConnectedIPs = make(map[string]int64)
 	}
 	proxyStats.User = user
