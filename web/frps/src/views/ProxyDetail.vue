@@ -90,24 +90,31 @@
         </div>
 
         <!-- Connected IPs Section -->
-        <div v-if="proxy.sortedConnectedIPs.length > 0" class="connected-ips-section">
+        <div class="connected-ips-section">
           <div class="config-section-header">
             <el-icon><Connection /></el-icon>
             <h2>Connected IPs</h2>
+            <el-tag size="small" type="primary" effect="light" class="ip-count-badge">
+              {{ proxy.sortedConnectedIPs.length }} {{ proxy.sortedConnectedIPs.length === 1 ? 'IP' : 'IPs' }}
+            </el-tag>
           </div>
-          <div class="ip-table">
+          <div v-if="proxy.sortedConnectedIPs.length > 0" class="ip-table">
             <div class="ip-table-header">
               <span class="ip-col">Source IP</span>
-              <span class="count-col">Connections</span>
+              <span class="count-col">Active Connections</span>
             </div>
             <div v-for="entry in proxy.sortedConnectedIPs" :key="entry.ip" class="ip-table-row">
               <span class="ip-col">{{ entry.ip }}</span>
               <span class="count-col">
                 <el-tag size="small" :type="entry.count > 10 ? 'danger' : entry.count > 5 ? 'warning' : 'info'">
-                  {{ entry.count }}
+                  {{ entry.count }} {{ entry.count === 1 ? 'conn' : 'conns' }}
                 </el-tag>
               </span>
             </div>
+          </div>
+          <div v-else class="no-ips-card">
+            <el-icon><Connection /></el-icon>
+            <span>No active remote client connections</span>
           </div>
         </div>
 
@@ -832,6 +839,27 @@ html.dark .config-item-icon.route {
 
 .ip-table-row:hover {
   background: var(--el-fill-color-light);
+}
+
+.ip-count-badge {
+  margin-left: 8px;
+}
+
+.no-ips-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--header-border);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.no-ips-card .el-icon {
+  font-size: 16px;
+  color: var(--el-color-info);
 }
 
 .ip-col {
