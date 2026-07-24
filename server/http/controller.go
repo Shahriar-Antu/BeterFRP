@@ -206,6 +206,7 @@ func (c *Controller) APIProxyByName(ctx *httppkg.Context) (any, error) {
 		TodayTrafficIn:  ps.TodayTrafficIn,
 		TodayTrafficOut: ps.TodayTrafficOut,
 		CurConns:        ps.CurConns,
+		ConnectedIPs:    ps.ConnectedIPs,
 		LastStartTime:   ps.LastStartTime,
 		LastCloseTime:   ps.LastCloseTime,
 	}
@@ -249,6 +250,7 @@ func (c *Controller) getProxyStatsByType(proxyType string) (proxyInfos []*model.
 		proxyInfo.TodayTrafficIn = ps.TodayTrafficIn
 		proxyInfo.TodayTrafficOut = ps.TodayTrafficOut
 		proxyInfo.CurConns = ps.CurConns
+		proxyInfo.ConnectedIPs = ps.ConnectedIPs
 		proxyInfo.LastStartTime = ps.LastStartTime
 		proxyInfo.LastCloseTime = ps.LastCloseTime
 		proxyInfos = append(proxyInfos, proxyInfo)
@@ -274,6 +276,7 @@ func (c *Controller) getProxyStatsByTypeAndName(proxyType string, proxyName stri
 		proxyInfo.TodayTrafficIn = ps.TodayTrafficIn
 		proxyInfo.TodayTrafficOut = ps.TodayTrafficOut
 		proxyInfo.CurConns = ps.CurConns
+		proxyInfo.ConnectedIPs = ps.ConnectedIPs
 		proxyInfo.LastStartTime = ps.LastStartTime
 		proxyInfo.LastCloseTime = ps.LastCloseTime
 		code = 200

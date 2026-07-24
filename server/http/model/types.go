@@ -98,16 +98,17 @@ type XTCPOutConf struct {
 
 // Get proxy info.
 type ProxyStatsInfo struct {
-	Name            string `json:"name"`
-	Conf            any    `json:"conf"`
-	User            string `json:"user,omitempty"`
-	ClientID        string `json:"clientID,omitempty"`
-	TodayTrafficIn  int64  `json:"todayTrafficIn"`
-	TodayTrafficOut int64  `json:"todayTrafficOut"`
-	CurConns        int64  `json:"curConns"`
-	LastStartTime   string `json:"lastStartTime"`
-	LastCloseTime   string `json:"lastCloseTime"`
-	Status          string `json:"status"`
+	Name            string           `json:"name"`
+	Conf            any              `json:"conf"`
+	User            string           `json:"user,omitempty"`
+	ClientID        string           `json:"clientID,omitempty"`
+	TodayTrafficIn  int64            `json:"todayTrafficIn"`
+	TodayTrafficOut int64            `json:"todayTrafficOut"`
+	CurConns        int64            `json:"curConns"`
+	ConnectedIPs    map[string]int64 `json:"connectedIPs"`
+	LastStartTime   string           `json:"lastStartTime"`
+	LastCloseTime   string           `json:"lastCloseTime"`
+	Status          string           `json:"status"`
 }
 
 type GetProxyInfoResp struct {
@@ -116,16 +117,17 @@ type GetProxyInfoResp struct {
 
 // Get proxy info by name.
 type GetProxyStatsResp struct {
-	Name            string `json:"name"`
-	Conf            any    `json:"conf"`
-	User            string `json:"user,omitempty"`
-	ClientID        string `json:"clientID,omitempty"`
-	TodayTrafficIn  int64  `json:"todayTrafficIn"`
-	TodayTrafficOut int64  `json:"todayTrafficOut"`
-	CurConns        int64  `json:"curConns"`
-	LastStartTime   string `json:"lastStartTime"`
-	LastCloseTime   string `json:"lastCloseTime"`
-	Status          string `json:"status"`
+	Name            string           `json:"name"`
+	Conf            any              `json:"conf"`
+	User            string           `json:"user,omitempty"`
+	ClientID        string           `json:"clientID,omitempty"`
+	TodayTrafficIn  int64            `json:"todayTrafficIn"`
+	TodayTrafficOut int64            `json:"todayTrafficOut"`
+	CurConns        int64            `json:"curConns"`
+	ConnectedIPs    map[string]int64 `json:"connectedIPs"`
+	LastStartTime   string           `json:"lastStartTime"`
+	LastCloseTime   string           `json:"lastCloseTime"`
+	Status          string           `json:"status"`
 }
 
 // /api/traffic/:name
