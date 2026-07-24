@@ -7,6 +7,7 @@ export interface ProxyStatsInfo {
   todayTrafficIn: number
   todayTrafficOut: number
   curConns: number
+  connectedIPs?: Record<string, number>
   lastStartTime: string
   lastCloseTime: string
   status: string
