@@ -10,14 +10,14 @@
             <LogoIcon class="logo-icon" />
           </div>
           <span class="divider">/</span>
-          <span class="brand-name">frp</span>
+          <span class="brand-name">BetterFRP</span>
           <span class="badge">Client</span>
         </div>
 
         <div class="header-controls">
           <a
             class="github-link"
-            href="https://github.com/fatedier/frp"
+            href="https://github.com/Shahriar-Antu/BeterFRP"
             target="_blank"
             aria-label="GitHub"
           >
